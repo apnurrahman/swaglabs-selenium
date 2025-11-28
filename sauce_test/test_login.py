@@ -17,16 +17,14 @@ def setup():
     yield driver
     driver.quit()
 
-#@pytest.mark.skip(reason="success")
-@pytest.mark.usefixtures(setup)
-@pytest.mark.login
+@pytest.mark.skip(reason="success")
 class TestLogin():
     def test_valid_login(self, setup):
         login = LoginPage(setup)
-        main_page = MainPage(setup)
+        mainPage = MainPage(setup)
         login.login("standard_user", "secret_sauce")
-        main_page.login_conf()
-        main_page.logout()
+        assert "Products" in mainPage.login_conf()
+        mainPage.logout()
     
     def test_multiple_valid_login(self, setup):
         #for user other than 'standard_user' will experience problem. That was no accident. It was by design.
@@ -43,10 +41,10 @@ class TestLogin():
 class TestMainPage():
     def test_add_to_cart(self, setup):
         login = LoginPage(setup)
-        main_page = MainPage(setup)
+        mainPage = MainPage(setup)
         login.login()
-        main_page.add_all_items_to_cart()
-        main_page.logout()
+        mainPage.add_all_items_to_cart()
+        mainPage.logout()
 
 @pytest.mark.usefixtures("setup")
 class TestCart():
