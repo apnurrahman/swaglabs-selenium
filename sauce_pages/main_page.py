@@ -8,19 +8,34 @@ import random
 class MainPage:
     def __init__(self, driver):
         self.driver = driver
-        self.add_item_loc = (By.CSS_SELECTOR, "button.btn_primary.btn_inventory")
-        self.conf_item_loc = (By.CSS_SELECTOR, "button.btn_secondary.btn_inventory")
-        self.logout_link_loc = (By.ID, "logout_sidebar_link")
-        self.filter_loc = (By.CSS_SELECTOR, "select.product_sort_container")
-        self.conf_loc = (By.CSS_SELECTOR, "span.title")
-        self.cart_loc = (By.CSS_SELECTOR, "a.shopping_cart_link")
+        self.add_item = (By.CSS_SELECTOR, "button.btn_primary.btn_inventory")
+        self.conf_item = (By.CSS_SELECTOR, "button.btn_secondary.btn_inventory")
+        self.logout_link = (By.ID, "logout_sidebar_link")
+        self.filter = (By.CSS_SELECTOR, "select.product_sort_container")
+        self.login = (By.CSS_SELECTOR, "span.title")
+        self.cart = (By.CSS_SELECTOR, "a.shopping_cart_link")
+        self.locators = {"add": self.add_item, "conf_item": self.conf_item, "logout": self.logout_link, 
+                           "filter": self.filter, "login": self.login, "cart": self.cart}
+    
+    def scroll_within_page(self):
+        """
+        Function to scroll anywhere within the page
+        
+        :param: None
+        :return: None
+        :rtype: None
+        """
+        pass
 
     def login_conf(self):
         """
-        Function to confirm pointer is in MainPage.
+        Function to confirm successful login.
+
+        :param: None
+        :return: Confirmation whether login successful or denied.
+        :rtype: None
         """
-        status = False
-        assert "Product" in self.driver.find_element(*self.conf_loc).text
+        assert "Product" in self.driver.find_element(*self.locators["login"]).text
         
     
     def select_product(self, product=""):
@@ -60,35 +75,15 @@ class MainPage:
                 print("No such element is found.")
                 self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
                 count+=1
-        #clicked_prod = self.driver.find_element(*self.conf_item_loc)
-        
-                
-
-
-    def add_all_items_to_cart(self):
-        """
-        Functions to add every item into cart. It iterates through whole page.
-        """
-
-        count = 0
-        while(count <= 2):
-            try:
-                catch = WebDriverWait(self.driver, 10).until(EC.presence_of_all_elements_located
-                                                        ((By.CLASS_NAME, "pricebar")))
-            except NoSuchElementException as NE:
-                print("No such element is found.")
-                self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                count+=1
-            else:
-                for item in catch:
-                    cart_button = item.find_element(*self.add_item_loc)
-                    assert "Add to cart" in cart_button.text
-                    cart_button.click()
-                break     
+        #clicked_prod = self.driver.find_element(*self.conf_item_loc)     
     
     def logout(self):
         """
-        Function to simulate logout flow. It opens up burger button of top-left.
+        Function to simulate logout action. It opens button on the top left.
+
+        :param: None
+        :return: None
+        :rtype: None
         """
 
         self.driver.execute_script("window.scrollTo(document.body.scrollHeight, 0);")
@@ -104,8 +99,11 @@ class MainPage:
 
     def nav_cart(self):
         """
-        Function to navigate to shopping cart.
-        """
+        Function to navigate to Cart page.
 
-        self.driver.find_element(*self.cart_loc).click()
+        :param: None
+        :return: None
+        :rtype: None
+        """
+        self.driver.find_element(*self.locators["cart"]).click()
         

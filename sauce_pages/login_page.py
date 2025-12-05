@@ -9,7 +9,7 @@ class LoginPage:
         self.pass_field = (By.ID, "password")
         self.login_button = (By.ID, "login-button")
         self.err_msg = (By.CSS_SELECTOR, 'h3[data-test="error"]')
-        self.cred = {"name": self.name_field, "pass": self.pass_field, 
+        self.locators = {"name": self.name_field, "pass": self.pass_field, 
                      "login": self.login_button, "err": self.err_msg}
     
     def wait(self, wait=5):
@@ -32,7 +32,7 @@ class LoginPage:
         """
 
         # using * (asteriks) to unpack
-        self.driver.find_element(*self.cred["name"]).send_keys(username)
+        self.driver.find_element(*self.locators["name"]).send_keys(username)
     
     def input_pass(self, password):
         """
@@ -41,7 +41,7 @@ class LoginPage:
         :param password: password to be filled in.
         :return: None.
         """
-        self.driver.find_element(*self.cred["pass"]).send_keys(password)
+        self.driver.find_element(*self.locators["pass"]).send_keys(password)
     
     def login(self, username="standard_user", password="secret_sauce"):
         """
@@ -54,7 +54,7 @@ class LoginPage:
         self.driver.get("https://www.saucedemo.com")
         self.input_username(username)
         self.input_pass(password)
-        self.driver.find_element(*self.cred["login"]).click()
+        self.driver.find_element(*self.locators["login"]).click()
 
     def login_err_conf(self):
         """
@@ -65,5 +65,5 @@ class LoginPage:
         :rtype: string
         """
         wait = self.wait()
-        err_msg = wait.until(EC.visibility_of_element_located(self.cred["err"]))
+        err_msg = wait.until(EC.visibility_of_element_located(self.locators["err"]))
         assert "Epic sadface" in err_msg.text, "Couldn't find the error message"
